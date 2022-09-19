@@ -15,22 +15,17 @@ const response = await fetch(steamUserWishlistUrl);
 const body = await response.text();
 const wishlistedGames = JSON.parse(body);
 
-console.log(JSON.stringify(wishlistedGames, null, 4));
+const steamGames = Object.keys(wishlistedGames).map((key) => {
+    const price = wishlistedGames[key].sub.length === 0 ? "-" : `${convertToEuro(wishlistedGames[key].subs[0].price)}€`;
 
-// const allGames = [];
+    return {
+        game: wishlistedGames[key].name,
+        reviews: wishlistedGames[key].review_desc,
+        price: price,
+    };
+});
 
-// for (const key in wishlistedGames) {
-//     console.log({
-//         name: wishlistedGames[key].name,
-//     });
-//     allGames.push({
-//         game: wishlistedGames[key].name,
-//         reviews: wishlistedGames[key].review_desc,
-//         price: `${convertToEuro(wishlistedGames[key].subs[0].price)}€`,
-//     });
-// }
-
-// console.log(allGames);
+console.log(steamGames);
 
 /**
  *  Looking up wishlisted games' estimated playtime
